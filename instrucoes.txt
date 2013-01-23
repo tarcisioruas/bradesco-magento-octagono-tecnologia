@@ -1,0 +1,81 @@
+Instalação do Módulo
+1) Copie o conteúdo do arquivo Zip para o diretório onde o seu Magento está instalado.
+	Note que é necessário instalar também o módulo WLPayment.
+
+2) Crie a pasta log dentro do diretório var do Magento, ficará <magentodir>/var/log. Este diretório deve ter permissões gerais de escrita (777).
+
+3) Configuração no painel de administração do Magento
+	a) Entre na página de administração do Magento.
+
+	b) Vá em Sistema->Configuração->Cache Management.
+		No campo "All Cache", escolha "Atualizar"
+		Em seguida clique em "Salvar configurações de cache"
+
+	c) Nas opções do módulo Bradesco, preencha os campos como demonstrado abaixo:
+		Habilitado: Sim
+		Título: Bradesco
+		Código Bradesco: Preencha com o número da loja junto ao Bradesco. Essa informação é fornecida pelo Bradesco ou pela empresa Scopus
+		Assinatura: Na fase de testes, deixe este campo em branco. Após a homologação o Bradesco/Scopus lhe enviará a assinatura digital por e-mail
+		Status de novos pedidos: Processando ou Pendente
+		Ambiente: Produção
+
+4) Certifique-se de copiar o diretório app/design/frontend/default/seu_template/template/bradesco/ para o diretório correspondente do template que está sendo utilizado.
+
+5) Páginas de Sucesso e de Falha
+    Certifique-se de que você copiou os arquivos abaixo para o seu template.
+	Esses arquivos contém alterações para que as páginas de sucesso e de falha exibam informações sobre a transação.
+	Sem isso, a operadora não homologará a loja.
+
+	Os arquivos são:
+		app/design/frontend/default/seu_template/template/checkout/onepage/failure.phtml
+		app/design/frontend/default/seu_template/template/checkout/success.phtml
+
+
+=======
+Configuração No Magento
+
+1) No Painel de Administração do Magento, selecione o método de pagamento Bradesco e preencha os campos como a seguir:
+
+- Código Bradesco: Preencha com o número da loja junto ao Bradesco. Essa informação é fornecida pelo Bradesco ou pela empresa Scopus
+- Assinatura: Na fase de testes, deixe este campo em branco. Após a homologação o Bradesco/Scopus lhe enviará a assinatura digital por e-mail
+
+========
+Configuração no Painel da Scopus (Bradesco)
+
+1) Acesse a página de administração do Bradesco MUP:
+    Observe que o endereço da página de administração do Bradesco MUP em fase de teste é http://mupteste.comercioeletronico.com.br/sepsmanager/senha.asp?loja=xxxxx
+	Onde xxxxx é o seu número da loja junto ao Bradesco, ex: 14692
+
+-   Clique em  "Configuração Bradesco" e preencha os campos como a seguir:
+
+-	Endereço IP da loja: O endereço IP do servidor no qual a sua loja está instalada
+-	Página de confirmação de compra: http://www.sualoja.com.br/Bradesco/standard/success
+-	Página de falha no pagamento: http://www.sualoja.com.br/Bradesco/standard/falha
+-	URL de notificação p/ Cartões Bradesco: http://www.sualoja.com.br/Bradesco/standard/pedido
+-	URL de notificação p/ Boleto Bancário Bradesco: http://www.sualoja.com.br/Bradesco/standard/pedido
+-	URL de notificação p/ Financiamento Bradesco: http://www.sualoja.com.br/Bradesco/standard/pedido
+-	URL de notificação p/ Transferência Identificada: http://www.sualoja.com.br/Bradesco/transferencia/pedido
+-	URL de notificação p/ CobFlex Bradesco: http://www.sualoja.com.br/Bradesco/standard/pedido
+-	Post a ser enviado para a loja na notificação: numOrder=[%lid_m%]&merchantid=[%merchantid%]&cod=[%errorcod%]&cctype=[%cctype%]&ccname=[%ccname%]&ccemail=[%ccemail%]&numparc=[%numparc%]&valparc=[%valparc%]&valtotal=[%valtotal%]&prazo=[%prazo%]&tipopagto=[%tipopagto%]&assinatura=[%assinatura%]&
+-	Post a ser enviado para a loja na confirmação de compra: numOrder=[%lid_m%]&merchantid=[%merchantid%]&
+-	Post a ser enviado para a loja na falha da autorização: numOrder=[%lid_m%]&merchantid=[%merchantid%]&cod=[%errorcod%]&errordesc=[%errordesc%]&
+-	Habilita "Referência" do boleto: Sim
+-	Apresenta Agência/Conta no corpo do Boleto: Sim
+-	URL de entrada na loja: http://www.sualoja.com.br
+-	URL do gerenciador da loja: http://www.sualoja.com.br/admin
+-	Estado padrão para as compras: Autorizado - à capturar (2)
+
+****Atenção: Este módulo não tem suporte a Cartões de Crédito, Financiamento e CobFlex, por isso os campos abaixo devem permanecer em branco.
+    URL de notificação p/ Cartões Bradesco:
+    URL de notificação p/ Financiamento Bradesco:
+    URL de notificação p/ CobFlex Bradesco:
+
+=========
+Homologação:
+
+Enviar e-mail para homologacao@scopus.com.br solicitando a homologação. Neste e-mail, deverão conter as seguintes informações:
+	- Nome da loja
+	- CNPJ da loja
+	- URL de acesso ao site da loja
+	- Informar quais opções de pagamentos que deverão ser homologadas
+

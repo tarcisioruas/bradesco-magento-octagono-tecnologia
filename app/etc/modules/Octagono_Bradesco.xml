@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Octagono Ecommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.octagonoecommerce.com.br/eula-licenca-usuario-final.html
+ *
+ *
+ * @category   Bradesco
+ * @package    Octagono_Bradesco
+ * @copyright  Copyright (c) 2009-2011 - Octagono Ecommerce - www.octagonoecommerce.com.br
+ * @license    http://www.octagonoecommerce.com.br/eula-licenca-usuario-final.html
+ */
+-->
+<config>
+	  <modules>
+		  <Octagono_Bradesco>
+			  <active>true</active>
+			  <codePool>community</codePool>
+		  </Octagono_Bradesco>
+	  </modules>
+</config>
+

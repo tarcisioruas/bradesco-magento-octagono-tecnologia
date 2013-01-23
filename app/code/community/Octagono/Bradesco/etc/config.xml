@@ -1,0 +1,127 @@
+﻿<?xml version="1.0"?>
+<!--
+/**
+ * Octagono Ecommerce
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.octagonoecommerce.com.br/eula-licenca-usuario-final.html
+ *
+ *
+ * @category   Bradesco
+ * @package    Octagono_Bradesco
+ * @copyright  Copyright (c) 2009-2011 - Octagono Ecommerce - www.octagonoecommerce.com.br
+ * @license    http://www.octagonoecommerce.com.br/eula-licenca-usuario-final.html
+ */
+-->
+<config>
+    <modules>
+        <Octagono_Bradesco>
+            <version>0.9.0</version>
+        </Octagono_Bradesco>
+    </modules>
+    <global>
+        <models>
+            <bradesco>
+                <class>Octagono_Bradesco_Model</class>
+                <resourceModel>bradesco_mysql4</resourceModel>
+            </bradesco>
+            <bradesco_mysql4>
+                <class>Octagono_Bradesco_Model_Mysql4</class>
+                <entities>
+                    <api_debug><table>bradesco_api_debug</table></api_debug>
+                </entities>
+            </bradesco_mysql4>
+        </models>
+        <resources>
+            <bradesco_setup>
+                <setup>
+                    <module>Octagono_Bradesco</module>
+                    <class>Octagono_Bradesco_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </bradesco_setup>
+            <bradesco_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </bradesco_write>
+            <bradesco_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </bradesco_read>
+        </resources>
+        <blocks>
+            <bradesco><class>Octagono_Bradesco_Block</class></bradesco>
+        </blocks>
+    </global>
+    <frontend>
+        <routers>
+            <bradesco>
+                <use>standard</use>
+                <args>
+                    <module>Octagono_Bradesco</module>
+                    <frontName>Bradesco</frontName>
+                </args>
+            </bradesco>
+        </routers>
+        <translate>
+            <modules>
+                <bradesco>
+                    <files>
+                        <default>Octagono_Bradesco.csv</default>
+                    </files>
+                </bradesco>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <bradesco>
+                    <file>bradesco.xml</file>
+                </bradesco>
+            </updates>
+        </layout>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <bradesco>
+                    <files>
+                        <default>Octagono_Bradesco.csv</default>
+                    </files>
+                </bradesco>
+            </modules>
+        </translate>
+    </adminhtml>
+
+    <default>
+         <payment>
+             <bradesco_standard>
+                  <model>Octagono_Bradesco_Model_Standard</model>
+                  <title>Bradesco</title>
+                  <allowspecific>0</allowspecific>
+				  <assinatura>233542AD8CA027BA56B63C2E5A530029F68AACD5E152234BFA1446836220CAA53BD3EA92B296CA94A313E4E438AD64C1E4CF2CBAD6C67DAA00DE7AC2C907A99979A5AB53BFEF1FD6DD3D3A24B278536929F7F747907F7F922C6C0F3553F8C6E29D68E1F6E0CA2566C46C63A2DD65AFF7DF4802FBF4811CA58619B33989B8DDF8</assinatura>
+				  <carteira>25</carteira>
+				  <custom_text>Após a confirmação do pedido, você será redirecionado para impressão do Boleto Bancário.</custom_text>
+				  <instrucoes1></instrucoes1>
+				  <instrucoes2>- Em caso de dúvidas entre em contato conosco: (xx) xxxx-xxxx ou xxxx@xxxx.com.br</instrucoes2>
+				  <instrucoes3></instrucoes3>
+				  <instrucoes4></instrucoes4>
+            </bradesco_standard>
+             <bradesco_transferencia>
+                  <model>Octagono_Bradesco_Model_Transferencia</model>
+                  <title>Bradesco Transferencia</title>
+                  <allowspecific>0</allowspecific>
+				  <assinatura>233542AD8CA027BA56B63C2E5A530029F68AACD5E152234BFA1446836220CAA53BD3EA92B296CA94A313E4E438AD64C1E4CF2CBAD6C67DAA00DE7AC2C907A99979A5AB53BFEF1FD6DD3D3A24B278536929F7F747907F7F922C6C0F3553F8C6E29D68E1F6E0CA2566C46C63A2DD65AFF7DF4802FBF4811CA58619B33989B8DDF8</assinatura>
+				  <custom_text>Após a confirmação do pedido, você será redirecionado para a página de pagamentos do Bradesco.</custom_text>
+			  </bradesco_transferencia>
+        </payment>
+    </default>
+</config>
+
