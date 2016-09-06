@@ -204,13 +204,13 @@ class Octagono_Bradesco_Model_Standard extends Mage_Payment_Model_Method_Abstrac
 function getNumEndereco($endereco) {
     	$numEndereco = '';
 
-    	//procura por vírgula ou traço para achar o final do logradouro
+    	//procura por vï¿½rgula ou traï¿½o para achar o final do logradouro
     	$posSeparador = $this->getPosSeparador($endereco, false);
     	if ($posSeparador !== false) {
 	    $numEndereco = trim(substr($endereco, $posSeparador + 1));
 	}
 
-    	//procura por vírgula, traço ou espaço para achar o final do número da residência
+    	//procura por vï¿½rgula, traï¿½o ou espaï¿½o para achar o final do nï¿½mero da residï¿½ncia
       	$posComplemento = $this->getPosSeparador($numEndereco, true);
 	if ($posComplemento !== false) {
 	    $numEndereco = trim(substr($numEndereco, 0, $posComplemento));
@@ -250,12 +250,21 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 		$quote = $this->getQuote($order->getQuoteId());
 
 		$a = $order->getBillingAddress();
+		
+		$customer = Mage::getModel('customer/customer')->load($order->getCustomerId());
+		$customer_cpf = $customer->getData('taxvat');
+		if(!is_null($customer_cpf))
+			$customer_cpf = preg_replace("/[^0-9]/", "", $customer_cpf);
+		else
+			$customer_cpf = '11111111111';
+		
 		$currency_code = $order->getBaseCurrencyCode();
 
-		$html  = '<BEGIN_ORDER_DESCRIPTION>';
-		$html .= "<orderid>=($order_id)";
+		$html  = "<BEGIN_ORDER_DESCRIPTION>\n";
+		$html .= "<orderid>=($order_id)\n";
 
 		$items = $order->getAllItems();
+		
 		if ($items) {
 			$i = 1;
 			foreach($items as $item) {
@@ -271,20 +280,24 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 				$valor = number_format($valor, 2, '', '');
 
 				$descritivo = $this->preparaCampo($item->getName());
-
-				$html .= '<descritivo>=(' . $descritivo . ')';
-				$html .= '<quantidade>=(' . $qty . ')';
-				$html .= '<unidade>=(un)';
-				$html .= '<valor>=(' .  $valor . ')';
+				
+				
+				if( $valor > 0 )
+				{
+					$html .= "<descritivo>=($descritivo)\n";
+					$html .= "<quantidade>=($qty)\n";
+					$html .= "<unidade>=(un)\n";
+					$html .= "<valor>=($valor)\n";
+				}	
 			}
 		}
 
-		//inclui a descrição do frete no pedido
+		//inclui a descricao do frete no pedido
         $frete = $quote->getShippingAddress()->getBaseShippingAmount();
 		if ($frete > 0) {
 			$frete = number_format($frete, 2, '', '');
-			$html .= '<adicional>=(frete)';
-			$html .= '<valorAdicional>=(' . $frete . ')';
+			$html .= "<adicional>=(frete)\n";
+			$html .= "<valorAdicional>=($frete)\n";
 		}
 
 		$dataVencimento = date("d/m/Y", time() + ($this->getConfigData('prazo_pagamento') * 86400));
@@ -302,6 +315,9 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 		}
 
 		$uf = $a->getState();
+		
+		
+		
 		if ($uf == '' || strlen($uf)>2) {
 			$uf = 'BR';
 		}
@@ -316,33 +332,33 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 		$instrucoes3 = $this->preparaCampo($this->getConfigData('instrucoes3'));
 		$instrucoes4 = $this->preparaCampo($this->getConfigData('instrucoes4'));
 
-		$html .= '<END_ORDER_DESCRIPTION>';
+		$html .= "<END_ORDER_DESCRIPTION>\n";
 
-		$html .= '<BEGIN_BOLETO_DESCRIPTION>';
-		$html .= '<CEDENTE>=(' . $cedente . ')';
-		$html .= '<BANCO>=(237)';
-		$html .= '<NUMEROAGENCIA>=(' . $agencia . ')';
-		$html .= '<NUMEROCONTA>=(' . $conta . ')';
-		$html .= '<ASSINATURA>=(' . $this->getConfigData('assinatura') . ')';
-		$html .= '<DATAEMISSAO>=(' . date("d/m/Y", time()) . ')';
-		$html .= '<DATAPROCESSAMENTO>=(' . date("d/m/Y", time()) . ')';
-		$html .= '<DATAVENCIMENTO>=(' . $dataVencimento . ')';
-		$html .= '<NOMESACADO>=(' . $this->preparaCampo($a->getFirstname().' '.$a->getLastname()) . ')';
-		$html .= '<ENDERECOSACADO>=(' . $this->preparaCampo($a->getStreet(1)) . ')';
-		$html .= '<CIDADESACADO>=(' . $cidadeSacado . ')';
-		$html .= '<UFSACADO>=(' . $this->preparaCampo($uf) . ')';
-		$html .= '<CEPSACADO>=(' . $cep . ')';
-		$html .= '<CPFSACADO>=(11111111111)';
-		$html .= '<NUMEROPEDIDO>=(' . $order_id . ')';
-		$html .= '<VALORDOCUMENTOFORMATADO>=(R$' . $total. ')';
-		$html .= '<SHOPPINGID>=(0)';
-		$html .= '<NUMDOC>=(' . $order->getRealOrderId() . ')';
-		$html .= '<CARTEIRA>=(' . $this->getConfigData('carteira') . ')';
-		$html .= '<INSTRUCAO1>=(' . $instrucoes1 . ')';
-		$html .= '<INSTRUCAO2>=(' . $instrucoes2 . ')';
-		$html .= '<INSTRUCAO3>=(' . $instrucoes3 . ')';
-		$html .= '<INSTRUCAO4>=(' . $instrucoes4 . ')';
-		$html .= '<END_BOLETO_DESCRIPTION>';
+		$html .= "<BEGIN_BOLETO_DESCRIPTION>";
+		$html .= "<CEDENTE>=($cedente)\n";
+		$html .= "<BANCO>=(237)\n";
+		$html .= "<NUMEROAGENCIA>=($agencia)\n";
+		$html .= "<NUMEROCONTA>=($conta)\n";
+		$html .= "<ASSINATURA>=({$this->getConfigData("assinatura")})\n";
+		$html .= "<DATAEMISSAO>=(".date("d/m/Y").")\n";
+		$html .= "<DATAPROCESSAMENTO>=(".date('d/m/Y').")\n";
+		$html .= "<DATAVENCIMENTO>=($dataVencimento)\n";
+		$html .= "<NOMESACADO>=({$this->preparaCampo($a->getFirstname()." ".$a->getLastname())})\n";
+		$html .= "<ENDERECOSACADO>=({$this->preparaCampo($a->getStreet(1))})\n";
+		$html .= "<CIDADESACADO>=($cidadeSacado)\n";
+		$html .= "<UFSACADO>=({$this->preparaCampo($uf)})\n";
+		$html .= "<CEPSACADO>=($cep)\n";
+		$html .= "<CPFSACADO>=($customer_cpf)\n";
+		$html .= "<NUMEROPEDIDO>=($order_id)\n";
+		$html .= "<VALORDOCUMENTOFORMATADO>=(R\${$total})\n";
+		$html .= "<SHOPPINGID>=(0)\n";
+		$html .= "<NUMDOC>=({$order->getRealOrderId()})\n";
+		$html .= "<CARTEIRA>=({$this->getConfigData("carteira")})\n";
+		$html .= "<INSTRUCAO1>=($instrucoes1)\n";
+		$html .= "<INSTRUCAO2>=($instrucoes2)\n";
+		$html .= "<INSTRUCAO3>=($instrucoes3)\n";
+		$html .= "<INSTRUCAO4>=($instrucoes4)\n";
+		$html .= "<END_BOLETO_DESCRIPTION>";
 
 		if($this->getDebug()) {
 			$logger->info('getStandardCheckoutFormFields: ' . $html);
@@ -367,12 +383,14 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
     }
 
     public function preparaCampo($campo) {
-		$campo = utf8_decode($campo); //converte para ISO-8859-1
+		
+    	$campo = htmlentities($campo); //codifica entidades HTML. Isso evita que o usuï¿½rio digite algum comando HTML que interfira na pï¿½gina
+    	
+    	$campo = utf8_decode($campo); //converte para ISO-8859-1
 
 		$campo = str_replace("\n", '', $campo); //retira quebras de linha
 
-		$campo = htmlentities($campo); //codifica entidades HTML. Isso evita que o usuário digite algum comando HTML que interfira na página
-
+		
 		$campo = str_replace(')', '&#41;', $campo); //codifica parentesis. O sistema do bradesco usa parentesis nos comandos
 
 		$campo = str_replace('(', '&#40;', $campo); //codifica parentesis. O sistema do bradesco usa parentesis nos comandos
@@ -411,7 +429,7 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 			$logger->info("Bradesco - entrando em captura()");
 		}
 
-		$textoCaptura = "Valor Capturado: $amount. Código da Transação: $tid. Código de Resposta da Transação: $responseCode. Mensagem: $message.";
+		$textoCaptura = "Valor Capturado: $amount. Cï¿½digo da Transaï¿½ï¿½o: $tid. Cï¿½digo de Resposta da Transaï¿½ï¿½o: $responseCode. Mensagem: $message.";
 
         $order = $this->getOrder($orderId);
 
@@ -422,7 +440,7 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 		if ($responseCode=='0' || $responseCode=='3') {
 			if (!$order->canInvoice()) {
 				//when order cannot create invoice, need to have some logic to take care
-				$ret = 'Este pedido não pode gerar Fatura. Verifique se a fatura já foi criada.';
+				$ret = 'Este pedido nï¿½o pode gerar Fatura. Verifique se a fatura jï¿½ foi criada.';
 
 				$order->addStatusToHistory(
 					$order->getStatus(),//continue setting current order status
@@ -490,7 +508,7 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
         if ($this->getDebug()) {
         }
 
-		$textoAutorizacao = "Valor: $amount. Código da Transação: $tid. Código de Resposta da Transação: $responseCode. Código de Autorização: $authCode. Mensagem: $message.";
+		$textoAutorizacao = "Valor: $amount. Cï¿½digo da Transaï¿½ï¿½o: $tid. Cï¿½digo de Resposta da Transaï¿½ï¿½o: $responseCode. Cï¿½digo de Autorizaï¿½ï¿½o: $authCode. Mensagem: $message.";
 
 		$order = $this->getOrder($orderId);
 		$payment = $order->getPayment();
@@ -499,7 +517,7 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 			//when grand total does not equal, need to have some logic to take care
 			$order->addStatusToHistory(
 				$order->getStatus(),//continue setting current order status
-				'Total do pedido não confere com o valor aprovado pela Bradesco. ' . $textoAutorizacao
+				'Total do pedido nï¿½o confere com o valor aprovado pela Bradesco. ' . $textoAutorizacao
 			);
 		}*/
 		if ($responseCode == 0 || $responseCode == 1) { //autorizou
@@ -524,10 +542,10 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 						->setCcCidStatus($responseCode);
 			}
 		}
-		else { //se a transação não foi aprovada
+		else { //se a transaï¿½ï¿½o nï¿½o foi aprovada
 			$order->addStatusToHistory(
 				'Cancelado', //$order->getStatus(),//continue setting current order status
-				'Transação não aprovada. ' . $textoAutorizacao
+				'Transaï¿½ï¿½o nï¿½o aprovada. ' . $textoAutorizacao
 			);
 		}
 
@@ -557,7 +575,7 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
             return false;
 		}
 		else {
-			Mage::throwException('Código da transação não identificado');
+			Mage::throwException('Cï¿½digo da transaï¿½ï¿½o nï¿½o identificado');
 		}
 		return $this;
 	}*/
@@ -601,11 +619,11 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 				}
 				else if ($result['lr'] == '2' || $result['lr'] == 2)
 				{
-					Mage::throwException('Falha na captura. Informação inconsistente: ' . $result['ars'] . '. LR: ' . $result['lr'] . '. Cap: ' . $result['cap']);
+					Mage::throwException('Falha na captura. Informaï¿½ï¿½o inconsistente: ' . $result['ars'] . '. LR: ' . $result['lr'] . '. Cap: ' . $result['cap']);
 				}
 				else if ($result['lr'] == '3' || $result['lr'] == 3)
 				{
-					Mage::throwException('Captura já efetuada: ' . $result['ars'] . '. LR: ' . $result['lr'] . '. Cap: ' . $result['cap']);
+					Mage::throwException('Captura jï¿½ efetuada: ' . $result['ars'] . '. LR: ' . $result['lr'] . '. Cap: ' . $result['cap']);
 				}
 				else
 				{
@@ -614,7 +632,7 @@ function getPosSeparador($endereco, $procuraEspaco = false) {
 			}
 		}
 		else {
-			Mage::throwException('Código da transação não identificado');
+			Mage::throwException('Cï¿½digo da transaï¿½ï¿½o nï¿½o identificado');
 		}
 		return $this;
     }*/

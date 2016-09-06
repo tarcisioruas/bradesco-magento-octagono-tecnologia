@@ -15,7 +15,8 @@
  * @copyright  Copyright (c) 2009-2011 - Octagono Ecommerce - www.octagonoecommerce.com.br
  * @license    http://www.octagonoecommerce.com.br/eula-licenca-usuario-final.html
  */
-class Octagono_Bradesco_Block_Transferencia_Form extends Octagono_Bradesco_Block_Transferencia_Standard
+//class Octagono_Bradesco_Block_Transferencia_Form extends Octagono_Bradesco_Block_Transferencia_Standard
+class Octagono_Bradesco_Block_Transferencia_Form extends Octagono_Bradesco_Block_Standard_Form
 {
     protected function _construct()
     {

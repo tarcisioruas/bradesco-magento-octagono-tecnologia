@@ -74,15 +74,18 @@ class Octagono_Bradesco_Model_Transferencia extends Octagono_Bradesco_Model_Stan
 				$valor = number_format($valor, 2, '', '');
 
 				$descritivo = $this->preparaCampo($item->getName());
-
-				$html .= '<descritivo>=(' . $descritivo . ')';
-				$html .= '<quantidade>=(' . $qty . ')';
-				$html .= '<unidade>=(un)';
-				$html .= '<valor>=(' .  $valor . ')';
+				
+				if( $valor > 0 )
+				{	
+					$html .= '<descritivo>=(' . $descritivo . ')';
+					$html .= '<quantidade>=(' . $qty . ')';
+					$html .= '<unidade>=(un)';
+					$html .= '<valor>=(' .  $valor . ')';
+				}
 			}
 		}
 
-		//inclui a descrição do frete no pedido
+		//inclui a descriï¿½ï¿½o do frete no pedido
         $frete = $quote->getShippingAddress()->getBaseShippingAmount();
 		if ($frete > 0) {
 			$frete = number_format($frete, 2, '', '');
@@ -97,7 +100,7 @@ class Octagono_Bradesco_Model_Transferencia extends Octagono_Bradesco_Model_Stan
 
 		if ($this->getConfigData('ambiente') == 'teste') {
 			$agencia = '0001';
-			$conta = '1234567';
+			$conta = '0000001';
 		}
 		else {
 			$agencia = $this->getConfigData('agencia');
@@ -122,7 +125,6 @@ class Octagono_Bradesco_Model_Transferencia extends Octagono_Bradesco_Model_Stan
 		$html .= '<END_ORDER_DESCRIPTION>';
 
 		$html .= '<BEGIN_TRANSFER_DESCRIPTION>';
-		$html .= '<BANCO>=(237)';
 		$html .= '<NUMEROAGENCIA>=(' . $agencia . ')';
 		$html .= '<NUMEROCONTA>=(' . $conta . ')';
 		$html .= '<ASSINATURA>=(' . $this->getConfigData('assinatura') . ')';

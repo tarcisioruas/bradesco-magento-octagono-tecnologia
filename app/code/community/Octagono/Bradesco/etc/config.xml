@@ -36,6 +36,11 @@
                 </entities>
             </bradesco_mysql4>
         </models>
+        <helpers>
+            <bradesco>
+                <class>Octagono_Bradesco_Helper</class>
+            </bradesco>
+        </helpers>
         <resources>
             <bradesco_setup>
                 <setup>
@@ -118,7 +123,7 @@
                   <model>Octagono_Bradesco_Model_Transferencia</model>
                   <title>Bradesco Transferencia</title>
                   <allowspecific>0</allowspecific>
-				  <assinatura>233542AD8CA027BA56B63C2E5A530029F68AACD5E152234BFA1446836220CAA53BD3EA92B296CA94A313E4E438AD64C1E4CF2CBAD6C67DAA00DE7AC2C907A99979A5AB53BFEF1FD6DD3D3A24B278536929F7F747907F7F922C6C0F3553F8C6E29D68E1F6E0CA2566C46C63A2DD65AFF7DF4802FBF4811CA58619B33989B8DDF8</assinatura>
+				  <assinatura>7B94A66D138FFD2AEBFBE3D8E0BDBD02700A5B793F017B0C8B40252C3680F9CD05C7EEB1A395C84916425DC318F7F07518D416194FB077AA47A8DBD2B35B2E4C376A23385FDD9B0AA3E7D0712B373B9EFD11028ADFC763B7EAD4A3E70FC8BE4A3CF4DA804E692A6173F4B81F568D7A9A38F663106149A34409B3C48147FBAA12</assinatura>
 				  <custom_text>Após a confirmação do pedido, você será redirecionado para a página de pagamentos do Bradesco.</custom_text>
 			  </bradesco_transferencia>
         </payment>
